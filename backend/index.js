@@ -23,7 +23,15 @@ app.use(cors(
 
 
 
-
+app.post('/new-user', async (req,res) => {
+    const {email, password} = req.body
+    try {
+        const user = await userSchema.create({email,password})
+        res.status(200).json(user)
+    } catch (err) {
+        res.status(500).json(err)
+    }
+} )
 
 
 
