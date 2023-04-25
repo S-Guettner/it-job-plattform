@@ -2,8 +2,9 @@ import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 import mongoose from 'mongoose'
-import './user-schema.js'
+import userData from './user-schema.js'
 import "./env-config.js"
+import {encryptPassword} from './authMiddleware.js'
 
 const PORT_SERVER = process.env.PORT_SERVER
 const DB_CONNECTION = process.env.DB_CONNECTION
@@ -23,13 +24,13 @@ app.use(cors(
 
 
 
-app.post('/new-user', async (req,res) => {
-    const {email, password} = req.body
+app.post('/api/v1/new-user', encryptPassword,async (req,res) => {
+    
     try {
-        const user = await userSchema.create({email,password})
+        const user = await userData.create(req.body)
         res.status(200).json(user)
     } catch (err) {
-        res.status(500).json(err)
+        res.status(500).json({message:err.message})
     }
 } )
 

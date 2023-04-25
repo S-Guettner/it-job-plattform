@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 
-const userSchema = mongoose.Schema(
+const user = mongoose.Schema(
     {
         userEmail:{
             type:String,
@@ -20,6 +20,6 @@ const userSchema = mongoose.Schema(
     }
 )
 
-const user = mongoose.model('userSchema',userSchema )
+const userData = mongoose.model('user',user )
 
-export default user
+export default userData
