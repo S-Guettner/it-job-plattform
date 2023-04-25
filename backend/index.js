@@ -2,7 +2,8 @@ import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 import mongoose from 'mongoose'
-import {userCompanyData, userApplicantData} from './schema/userCompaniesSchema.js'
+import userCompanyData from './schema/userCompaniesSchema.js'
+import userApplicantData from './schema/userApplicantSchema.js'
 import "./env-config.js"
 import {validateUserEmail,validateUserPassword,encryptPassword} from './middleware/authMiddleware.js'
 import {validationResult} from 'express-validator'
@@ -55,6 +56,7 @@ app.post('/api/v1/new-applicant',
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
     }
+    console.log(req.body)
     const {userEmail,userPassword} = req.body
     try {
         const user = await userApplicantData.create({userEmail,userPassword})
