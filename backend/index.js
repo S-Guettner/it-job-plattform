@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 import mongoose from 'mongoose'
-import userCompanyData from './schema/userCompaniesSchema.js'
+import {userCompanyData, userApplicantData} from './schema/userCompaniesSchema.js'
 import "./env-config.js"
 import {validateUserEmail,validateUserPassword,encryptPassword} from './middleware/authMiddleware.js'
 import {validationResult} from 'express-validator'
@@ -35,9 +35,9 @@ app.post('/api/v1/new-company',
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
     }
-    const {userCompanyEmail,userCompanyPassword} = req.body
+    const {userEmail,userPassword} = req.body
     try {
-        const user = await userCompanyData.create({userCompanyEmail,userCompanyPassword})
+        const user = await userCompanyData.create({userEmail,userPassword})
         res.status(200).json(user)
     } catch (err) {
         res.status(501).json({message:err.message})
@@ -46,6 +46,23 @@ app.post('/api/v1/new-company',
 
 
 
+app.post('/api/v1/new-applicant',
+    validateUserEmail,
+    validateUserPassword,
+    encryptPassword,
+    async (req,res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
+    const {userEmail,userPassword} = req.body
+    try {
+        const user = await userApplicantData.create({userEmail,userPassword})
+        res.status(200).json(user)
+    } catch (err) {
+        res.status(501).json({message:err.message})
+    }
+})
 
 
 
