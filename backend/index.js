@@ -2,10 +2,10 @@ import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 import mongoose from 'mongoose'
-import userData from './schema/user-schema.js'
+import userCompanyData from './schema/userCompaniesSchema.js'
 import "./env-config.js"
 import {validateUserEmail,validateUserPassword,encryptPassword} from './middleware/authMiddleware.js'
-import {check, validationResult} from 'express-validator'
+import {validationResult} from 'express-validator'
 
 const PORT_SERVER = process.env.PORT_SERVER
 const DB_CONNECTION = process.env.DB_CONNECTION
@@ -26,23 +26,25 @@ app.use(cors(
 
 
 
-app.post('/api/v1/new-user',
+app.post('/api/v1/new-company',
     validateUserEmail,
     validateUserPassword,
     encryptPassword,
     async (req,res) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() })
-        }
-    const {userEmail,userPassword} = req.body
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
+    }
+    const {userCompanyEmail,userCompanyPassword} = req.body
     try {
-        const user = await userData.create({userEmail,userPassword})
+        const user = await userCompanyData.create({userCompanyEmail,userCompanyPassword})
         res.status(200).json(user)
     } catch (err) {
         res.status(501).json({message:err.message})
     }
-} )
+})
+
+
 
 
 
