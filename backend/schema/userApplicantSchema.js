@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 
 const userApplicant = mongoose.Schema(
     {
-        userCompanyEmail:{
+        userEmail:{
             type:String,
             require:[true, "E-mail adress is required"],
             unique: true,
@@ -12,7 +12,7 @@ const userApplicant = mongoose.Schema(
         },
 
 
-        userCompanyPassword: {
+        userPassword: {
             type:String,
             require:[true, "Password is required"],
             minLength:6
