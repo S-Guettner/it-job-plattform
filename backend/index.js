@@ -2,11 +2,12 @@ import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 import mongoose from 'mongoose'
+import cookieParser from 'cookie-parser'
+import {validationResult} from 'express-validator'
 import userCompanyData from './schema/userCompaniesSchema.js'
 import userApplicantData from './schema/userApplicantSchema.js'
 import "./env-config.js"
 import {validateUserEmail,validateUserPassword,encryptPassword} from './middleware/authMiddleware.js'
-import {validationResult} from 'express-validator'
 
 const PORT_SERVER = process.env.PORT_SERVER
 const DB_CONNECTION = process.env.DB_CONNECTION
@@ -14,6 +15,7 @@ const DB_CONNECTION = process.env.DB_CONNECTION
 const app = express()
 
 app.use(express.json())
+app.use(cookieParser())
 app.use(morgan("combined"))
 
 app.use(cors(
