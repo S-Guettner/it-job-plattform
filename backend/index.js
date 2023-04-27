@@ -3,7 +3,7 @@ import cors from 'cors'
 import morgan from 'morgan'
 import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
-import cookieConfig from './authorization/jwt.js'
+import {cookieConfig} from './authorization/jwt.js'
 import { createToken } from './authorization/jwt.js'
 import {validationResult} from 'express-validator'
 import userCompanyData from './schema/userCompaniesSchema.js'
@@ -50,7 +50,9 @@ app.post('/api/v1/new-company',
 })
 
 //company login
-app.post('/api/v1/company-login' , async (req,res) => {
+app.post('/api/v1/company-login' , 
+    encryptPassword,
+    async (req,res) => {
     const {userEmail,userPassword} = req.body
     const user = await userCompanyData.findOne({userEmail,userPassword})
     if(user === null) res.status(401).json({message:"User not found"})
