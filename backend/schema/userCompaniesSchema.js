@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-
+/* todo: update schema to new form  */
 const userCompany = mongoose.Schema(
     {
         userEmail:{
