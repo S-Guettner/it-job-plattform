@@ -22,7 +22,7 @@ app.use(morgan("combined"))
 
 app.use(cors(
     {
-        origin: '*',
+        origin: true,
         methods: ['GET', 'POST'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials:true
