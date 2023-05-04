@@ -9,7 +9,7 @@ import {validationResult} from 'express-validator'
 import userCompanyData from './schema/userCompaniesSchema.js'
 import userApplicantData from './schema/userApplicantSchema.js'
 import "./env-config.js"
-import {validateUserEmail,validateUserPassword,encryptPassword} from './middleware/authMiddleware.js'
+import {validateUserEmail,validateUserPassword,encryptPassword,authMiddleware} from './middleware/authMiddleware.js'
 
 const PORT_SERVER = process.env.PORT_SERVER
 const DB_CONNECTION = process.env.DB_CONNECTION
@@ -57,11 +57,25 @@ app.post('/api/v1/company-login' ,
     const user = await userCompanyData.findOne({userEmail,userPassword})
     if(user === null) res.status(401).json({message:"User not found"})
     else{
-        const token = createToken(user)
+        const token = createToken(user._id)
         res.cookie('token',token,cookieConfig)
-        res.end()
+        res.status(200).end()
     }
 })
+
+//company login auth.
+app.get("/api/v1/company-login_auth" ,authMiddleware, (req,res) =>{
+    try {
+    console.log("userClaims", req.userClaims);
+    // const db = await getDB();
+    // const products = await db.collection("products").findOne({_id: req.userClaims.sub})
+    res.status(200).end();
+  }catch(error) {
+    res.status(500).end()
+  }
+}
+
+)
 
 
 //applicant registration
