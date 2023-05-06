@@ -63,6 +63,14 @@ app.post('/api/v1/company-login' ,
     }
 })
 
+//company logout (delete cookie)
+app.post('/api/v1/company-logout' , (req,res) => {
+    res.clearCookie('token', { httpOnly: true })
+    res.status(200).end()
+})
+
+
+
 //company login auth.
 app.get("/api/v1/company-login_auth" ,authMiddleware, (req,res) =>{
     try {
