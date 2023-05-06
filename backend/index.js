@@ -42,8 +42,14 @@ app.post('/api/v1/new-company',
     }
     const {userEmail,userPassword} = req.body
     try {
-        const user = await userCompanyData.create({userEmail,userPassword})
-        res.status(200).json(user)
+        const uniqueMailCheck = await userCompanyData.findOne({userEmail})
+        //checks if mail is already in use
+        if(uniqueMailCheck === null){
+            const user = await userCompanyData.create({userEmail,userPassword})
+            res.status(200).json(user)
+        }else{
+            res.status(502).json({message:"email already in use"})
+        }
     } catch (err) {
         res.status(501).json({message:err.message})
     }
