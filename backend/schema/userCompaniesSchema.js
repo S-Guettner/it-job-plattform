@@ -1,6 +1,24 @@
 import mongoose from 'mongoose'
 
-/* todo: update schema to new form  */
+const languages = mongoose.Schema({
+    language:String
+})
+
+const jobPostingSchema = mongoose.Schema({
+  jobTitle: String,
+  jobDescription: String,
+  applications: [{
+    name: String,
+    email: String,
+    githubLink:String,
+    websiteLink:String,
+    resume: String,
+    coverLetter: String,
+    programmingLanguages:[languages]
+  }]
+})
+
+
 const userCompany = mongoose.Schema(
     {
         userEmail:{
@@ -58,7 +76,15 @@ const userCompany = mongoose.Schema(
             type:String,
             require:[true, "Company Name is required"],
             length:1
-        }
+        },
+
+        companyDescription:{
+            type:String,
+            length:1
+        },
+        jobPostings:[jobPostingSchema]
+
+        
     }
 )
 
