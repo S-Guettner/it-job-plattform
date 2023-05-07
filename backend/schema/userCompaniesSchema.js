@@ -4,10 +4,7 @@ const languages = mongoose.Schema({
     language:String
 })
 
-const jobPostingSchema = mongoose.Schema({
-  jobTitle: String,
-  jobDescription: String,
-  applications: [{
+const applications = mongoose.Schema({
     name: String,
     email: String,
     githubLink:String,
@@ -15,7 +12,12 @@ const jobPostingSchema = mongoose.Schema({
     resume: String,
     coverLetter: String,
     programmingLanguages:[languages]
-  }]
+})
+
+const jobPostingSchema = mongoose.Schema({
+  jobTitle: String,
+  jobDescription: String,
+  programmingLanguages:[languages]
 })
 
 
