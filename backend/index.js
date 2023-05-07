@@ -22,7 +22,7 @@ app.use(morgan("combined"))
 
 app.use(cors(
     {
-        origin: "http://localhost:5173/",
+        origin: "http://localhost:5173j",
         methods: ['GET', 'POST'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials:true
@@ -36,7 +36,8 @@ app.post('/api/v1/new-company',
     validateUserPassword,
     encryptPassword,
     async (req,res) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req)
+    console.log(req.body)
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
     }
@@ -87,10 +88,29 @@ app.get("/api/v1/company-login_auth" ,authMiddleware, (req,res) =>{
   }catch(error) {
     res.status(500).end()
   }
-}
+})
 
-)
+//create new job post
+app.post("/api/v1/company-new-job-post/:id" , async (req,res) => {
+    try {
+        const {jobTitle,jobDescription,languages} = req.body
+        const user = await userCompanyData.findById(req.params.id)
+        if(!user){
+            res.status(400).json({message: "User not found"})
+        }
+        const newJobPost = {
+            jobTitle,
+            jobDescription,
+            programmingLanguages:languages.map(language => ({ language })),
+        }
 
+        user.jobPostings.push(newJobPost)
+        await user.save()
+        res.status(200).json(user)
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+})
 
 //applicant registration
 app.post('/api/v1/new-applicant',
