@@ -22,7 +22,7 @@ app.use(morgan("combined"))
 
 app.use(cors(
     {
-        origin: "http://localhost:5173j",
+        origin: "http://localhost:5173",
         methods: ['GET', 'POST'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials:true
@@ -81,7 +81,7 @@ app.post('/api/v1/company-logout' , (req,res) => {
 //company login auth.
 app.get("/api/v1/company-login_auth" ,authMiddleware, (req,res) =>{
     try {
-    console.log("userClaims", req.userClaims);
+    console.log("userClaims", req.userClaims)
     // const db = await getDB();
     // const products = await db.collection("products").findOne({_id: req.userClaims.sub})
     res.status(200).end();
@@ -91,10 +91,13 @@ app.get("/api/v1/company-login_auth" ,authMiddleware, (req,res) =>{
 })
 
 //create new job post
-app.post("/api/v1/company-new-job-post/:id" , async (req,res) => {
+app.post("/api/v1/company-new-job-post" , async (req,res) => {
     try {
+        /* todo: get user id from jwt cookie */
+        const id = req.userClaims.sub
+        console.log(id)
         const {jobTitle,jobDescription,languages} = req.body
-        const user = await userCompanyData.findById(req.params.id)
+        const user = await userCompanyData.findById(id)
         if(!user){
             res.status(400).json({message: "User not found"})
         }
@@ -113,7 +116,7 @@ app.post("/api/v1/company-new-job-post/:id" , async (req,res) => {
 })
 
 //applicant registration
-app.post('/api/v1/new-applicant',
+/* app.post('/api/v1/new-applicant',
     validateUserEmail,
     validateUserPassword,
     encryptPassword,
@@ -130,7 +133,7 @@ app.post('/api/v1/new-applicant',
     } catch (err) {
         res.status(501).json({message:err.message})
     }
-})
+}) */
 
 
 
